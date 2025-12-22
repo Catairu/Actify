@@ -36,17 +36,17 @@ class ConvAE(lit.LightningModule):
         """The commented code in this part was used for running a sweep for the AE hyperparameters
         to avoid dimensions mismatch due to kernel size, padding combinations"""
 
-        # original_length = x.shape[-1]
+        original_length = x.shape[-1]
         z = self.encoder(x)
         x_hat = self.decoder(z)
 
-        # if x_hat.shape[-1] != original_length:
+        if x_hat.shape[-1] != original_length:
         # Interpolate (resize) the output to exactly match the input's length (128)
         # This uses the linear interpolation mode appropriate for 1D time series data
-        # x_hat = F.interpolate(x_hat,
-        # size=original_length,
-        # mode='linear',
-        # align_corners=False)
+            x_hat = F.interpolate(x_hat,
+            size=original_length,
+             mode='linear',
+             align_corners=False)
         return x_hat
 
     def training_step(self, batch, batch_idx):
