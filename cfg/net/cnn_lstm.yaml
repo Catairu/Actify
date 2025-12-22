@@ -1,0 +1,53 @@
+name: cnn_lstm 
+depth: 2
+width: 128
+num_classes: 6
+
+embed:
+  _target_: net.blocks.cnn.ConvBlock
+  in_channels: 9
+  out_channels: ${net.width}
+  kernel_size: 5
+  pool_size: 1
+  dropout: 0.4
+
+block:
+  _target_: net.blocks.cnn.ConvBlock 
+  in_channels: ${net.width}
+  out_channels: ${net.width}
+  kernel_size: 5
+  pool_size: 2
+  dropout: 0.38
+
+lstm_block:
+  _target_: net.blocks.lstm.LSTMBlock 
+
+  input_size: ${net.width}
+  hidden_size: 256
+
+  num_layers: 2
+  dropout: 0.1
+
+  use_layer_norm: False
+  bidirectional: True
+
+unembed:
+  _target_: torch.nn.LazyLinear
+  out_features: 6
+
+optimizer:
+  _target_: torch.optim.Adam
+  lr: 0.00043
+  weight_decay: 0.0
+
+trainer:
+  max_epochs: 100
+  log_every_n_steps: 10
+
+dataset:
+  data_dir: "./data"
+  batch_size: 16
+  val_split: 0.2
+
+callbacks:
+  patience: 8

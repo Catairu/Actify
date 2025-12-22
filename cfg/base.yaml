@@ -1,0 +1,11 @@
+defaults:
+  - _self_ 
+  - net: cnn_lstm
+
+seed: 42
+k_folds: 5
+
+wandb :
+  project: "Actify"
+  entity: "catairu-sapienza-universit-di-roma"
+  name: "Experiment"

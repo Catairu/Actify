@@ -1,0 +1,82 @@
+program: src/experiment.py
+project: Actify
+method: bayes
+
+metric:
+  name: val_acc
+  goal: maximize
+
+parameters:
+    k_folds:
+        values: [5, 10]
+
+    net.trainer.max_epochs:
+        distribution: int_uniform
+        min: 40
+        max: 80
+
+    net.dataset.batch_size:
+        values: [16, 32, 64, 128]
+
+    net.dataset.val_split:
+        distribution: uniform
+        min: 0.1
+        max: 0.3
+
+    net.depth:
+        values: [2, 3, 4]
+
+    net.width:
+        values: [32, 64, 128]
+        
+    net.optimizer._target_:
+        values:
+            - torch.optim.Adam
+            - torch.optim.AdamW
+
+    net.optimizer.lr:
+        distribution: uniform
+        min: 0.0001
+        max: 0.001
+    
+    net.optimizer.weight_decay:
+        distribution: uniform
+        min: 0
+        max: 0.01
+    
+    net.lstm_block.hidden_size:
+        values: [64, 128, 256]
+
+    net.lstm_block.num_layers:
+        values: [1, 2, 3]
+
+    net.block.dropout:
+        distribution: uniform
+        min: 0.3
+        max: 0.7
+
+    net.block.pool_size:
+        values: [2, 3]
+        
+    net.block.kernel_size:
+        values: [3, 5, 7]
+    
+    net.embed.dropout:
+        distribution: uniform
+        min: 0.1
+        max: 0.5
+    
+    net.embed.kernel_size:
+        values: [3, 5, 7]
+    
+    net.embed.pool_size:
+        values: [1, 2]
+        
+        
+
+command:
+  - uv
+  - run
+  - python
+  - src/experiment.py
+  - ${args_no_hyphens}

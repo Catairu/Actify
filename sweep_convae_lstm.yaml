@@ -1,0 +1,44 @@
+program: src/experiment.py
+project: Actify
+method: bayes
+
+metric:
+  name: val_f1_macro
+  goal: maximize
+
+parameters:  
+  net.dataset.batch_size:
+    values: [16, 32, 64, 128]
+
+#### ENCODER PART ########
+  net.embed.kernel_size:
+   values: [5,7,9,11]
+
+  net.embed.pool_size:
+   values: [2,4]
+
+  net.embed.pool_type:
+   values: ["avg","max"]
+
+  net.embed.out_channels:
+    values: [64, 128, 256]
+      
+#### LSTM PART ########
+
+  net.rnn_block.hidden_size:
+      values: [64, 128]
+
+  net.rnn_block.dropout:
+   distribution: uniform
+   min: 0.3
+   max: 0.7
+
+
+
+
+command:
+  - uv
+  - run
+  - python
+  - src/experiment.py
+  - ${args_no_hyphens}
