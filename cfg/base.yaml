@@ -1,6 +1,6 @@
 defaults:
   - _self_ 
-  - net: cnn_lstm
+  - net: convae_lstm
 
 seed: 42
 k_folds: 5
